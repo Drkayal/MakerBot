@@ -3,7 +3,7 @@ from pyromod import listen
 import os
 from config import API_ID, API_HASH, BOT_TOKEN
 
-bot = Client(
+main_bot = Client(
     "B7R",
     api_id=API_ID,
     api_hash=API_HASH,
@@ -13,7 +13,7 @@ bot = Client(
 
 async def start_bot():
     print("[INFO]: جاري تشغيل البوت")
-    await bot.start()
+    await main_bot.start()
     print("[INFO]: بدأ تشغيل")
     # استدعاء دالة التحميل الأولي
     try:

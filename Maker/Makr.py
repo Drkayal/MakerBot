@@ -12,7 +12,7 @@ from pymongo import MongoClient
 from motor.motor_asyncio import AsyncIOMotorClient as mongo_client
 from random import randint
 from pyrogram.raw.functions.phone import CreateGroupCall
-from config import API_ID, API_HASH, MONGO_DB_URL, OWNER, OWNER_ID, OWNER_NAME, CHANNEL, GROUP, PHOTO, VIDEO
+from config import API_ID, API_HASH, MONGO_DB_URL, OWNER, OWNER_ID, OWNER_NAME, CHANNEL, GROUP, PHOTO, VIDEO, BOT_TOKEN
 
 # إعداد السجل (logging)
 logging.basicConfig(
@@ -26,7 +26,7 @@ bot = Client(
     "FactoryBot",
     api_id=API_ID,
     api_hash=API_HASH,
-    bot_token=os.getenv("BOT_TOKEN")  # يجب تمرير التوكن من المتغيرات البيئية
+    bot_token=BOT_TOKEN
 )
 
 # تهيئة قاعدة البيانات
