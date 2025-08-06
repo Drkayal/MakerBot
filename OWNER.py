@@ -8,7 +8,7 @@ infophoto = "Source LoL"
 #توكن
 BOT_TOKEN = ""
 #مونجو
-DATABASE = "8020231543:AAHFLDS8a77eqGA045YZFV8uQjvr34IvWrM/?retryWrites=true&w=majority&appName=Cluster0" 
+DATABASE = "mongodb+srv://fasd2025:faresbakil2025@cluster0.wdjssoo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 #قناة سورس
 CHANNEL = "https://t.me/k55dd"
 #كروب سورس
