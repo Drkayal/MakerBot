@@ -996,8 +996,7 @@ async def stop_all_bots(client, message):
         await message.reply_text(f"** ≭︰تم ايقاف {count} بوت بنجاح **")
 
 # بدء التحميل الأولي للبيانات عند التشغيل
-@bot.on_start()
-async def on_start(_, __):
+async def on_start():
     await load_data()
     logger.info("تم بدء تشغيل صانع البوتات")
 

@@ -15,6 +15,12 @@ async def start_bot():
     print("[INFO]: جاري تشغيل البوت")
     await bot.start()
     print("[INFO]: بدأ تشغيل")
+    # استدعاء دالة التحميل الأولي
+    try:
+        from Maker.Makr import on_start
+        await on_start()
+    except Exception as e:
+        print(f"[ERROR]: خطأ في التحميل الأولي: {e}")
     await idle()
 
 
