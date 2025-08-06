@@ -1,22 +1,23 @@
 # متطلبات التنصيب #
 
 #يوزر المطور
-OWNER = ["Y_o_V"] 
-OWNER__ID = 6094238403
-OWNER_DEVELOPER = 6094238403
-OWNER_NAME = "𓏺 َ𝗬𝗼𝘂𝘀𝗲𝗳"
+OWNER = ["AAAKP"] 
+OWNER_ID = 985612253
+OWNER_DEVELOPER = 985612253
+#اسم المطور
+OWNER_NAME = "𓏺 َ𝐷𝑟. 𝐾ℎ𝑎𝑦𝑎𝑙 𓏺"
 #اسم التي سيظهر على صورة
-infophoto = "Alsayed Playing"
-DATABASE = "mongodb+srv://huSeen96:Huseenslah96@cluster0.ld2v7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" 
+infophoto = "Source LoL"
+#مونجو
+DATABASE = "mongodb+srv://fasd2025:faresbakil2025@cluster0.wdjssoo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 #قناة سورس
-CHANNEL = "https://t.me/x_v_l"
+CHANNEL = "https://t.me/k55dd"
 #كروب سورس
-GROUP = "https://t.me/PRTRZA"
+GROUP = "https://t.me/YMMYN"
 #فيديو سورس اذا ماعندك خليه
 VIDEO = "https://t.me/MusicxXxYousef/91"
 #صورة سورس اذا ماعندك خليها
 PHOTO = "https://t.me/MusicxXxYousef/90"
 #ساوي كروب وضيف عليه مصنع ورفعو اشراف وحط يوزر الكروب هنا
-LOGS = "xjjfjfhh"
- 
+LOGS = "Yemen_Chat2"
  
