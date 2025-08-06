@@ -51,19 +51,29 @@ async def load_data():
     """تحميل البيانات الأولية من قاعدة البيانات"""
     global Bots, mk, blocked
     
-    # تحميل البوتات
-    async for bot_data in bot_db.find():
-        Bots.append([bot_data["username"], bot_data["dev"]])
-    
-    # تحميل الدردشات
-    async for chat_data in mkchats_db.find():
-        mk.append(int(chat_data["chat_id"]))
-    
-    # تحميل المحظورين
-    async for blocked_data in blocked_db.find():
-        blocked.append(int(blocked_data["user_id"]))
-    
-    logger.info("تم تحميل البيانات الأولية بنجاح")
+    try:
+        # تحميل البوتات
+        bot_cursor = bot_db.find()
+        bot_list = await bot_cursor.to_list(length=None)
+        for bot_data in bot_list:
+            Bots.append([bot_data["username"], bot_data["dev"]])
+        
+        # تحميل الدردشات
+        chat_cursor = mkchats_db.find()
+        chat_list = await chat_cursor.to_list(length=None)
+        for chat_data in chat_list:
+            mk.append(int(chat_data["chat_id"]))
+        
+        # تحميل المحظورين
+        blocked_cursor = blocked_db.find()
+        blocked_list = await blocked_cursor.to_list(length=None)
+        for blocked_data in blocked_list:
+            blocked.append(int(blocked_data["user_id"]))
+        
+        logger.info("تم تحميل البيانات الأولية بنجاح")
+    except Exception as e:
+        logger.error(f"خطأ في تحميل البيانات: {e}")
+        # تجاهل الخطأ والاستمرار
 
 async def is_dev(user_id: int) -> bool:
     """التحقق مما إذا كان المستخدم مطورًا"""
