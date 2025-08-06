@@ -53,20 +53,17 @@ async def load_data():
     
     try:
         # تحميل البوتات
-        bot_cursor = bot_db.find()
-        bot_list = await bot_cursor.to_list(length=None)
+        bot_list = list(bot_db.find())
         for bot_data in bot_list:
             Bots.append([bot_data["username"], bot_data["dev"]])
         
         # تحميل الدردشات
-        chat_cursor = mkchats_db.find()
-        chat_list = await chat_cursor.to_list(length=None)
+        chat_list = list(mkchats_db.find())
         for chat_data in chat_list:
             mk.append(int(chat_data["chat_id"]))
         
         # تحميل المحظورين
-        blocked_cursor = blocked_db.find()
-        blocked_list = await blocked_cursor.to_list(length=None)
+        blocked_list = list(blocked_db.find())
         for blocked_data in blocked_list:
             blocked.append(int(blocked_data["user_id"]))
         
