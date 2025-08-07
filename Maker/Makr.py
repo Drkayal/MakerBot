@@ -692,7 +692,7 @@ async def create_bot(client, message):
 
         # اختبار التشغيل (لمدة أطول)
         test_msg = await message.reply("**≭︰جاري اختبار تشغيل البوت، هذه العملية قد تستغرق حتى 30 ثانية...**")
-        cmd = ["python3", "-c", "import AnonXMusic; print('تم التحقق من الاستيراد بنجاح')"]
+        cmd = ["python3", "-c", "import AnonXMusic; print('Bot test passed successfully')"]
         _, stderr, returncode = await safe_screen_command(cmd, cwd=bot_dir)
         
         if returncode != 0:
