@@ -263,69 +263,79 @@ async def broadcast_handler(bot, msg):
 @bot.on_message(filters.command("start") & filters.private)
 async def start_command(bot, msg):
     """معالج أمر /start"""
-    if not await is_user(msg.from_user.id):
-        await add_new_user(msg.from_user.id) 
-        text = (
-            f"** ≭︰  دخل عضو جديد لـ↫ مصنع   **\n\n"
-            f"** ≭︰  الاسم : {msg.from_user.first_name}   **\n"
-            f"** ≭︰  تاك : {msg.from_user.mention}   **\n"
-            f"** ≭︰  الايدي : {msg.from_user.id} **"
-        )
-        user_count = len(await get_users())
-        reply_markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(f" ≭︰عدد الاعضاء  {user_count}", 
-             callback_data=f"user_count_{msg.from_user.id}")]]
-        )
-        
-        if msg.chat.id not in OWNER_ID:
-            for user_id in OWNER_ID:
-                try:
-                    await bot.send_message(
-                        int(user_id), 
-                        text, 
-                        reply_markup=reply_markup
-                    )
-                except Exception as e:
-                    logger.error(f"فشل إرسال إشعار للمطور {user_id}: {e}")
-
-    # عرض واجهة المستخدم المناسبة
-    if off:
-        if not await is_dev(msg.chat.id):
-            return await msg.reply_text(
-                f"**≭︰التنصيب المجاني معطل، راسل المبرمج ↫ @{OWNER[0]}**"
+    print(f"[DEBUG] تم استلام أمر /start من المستخدم: {msg.from_user.id}")
+    try:
+        if not await is_user(msg.from_user.id):
+            print(f"[DEBUG] مستخدم جديد: {msg.from_user.id}")
+            await add_new_user(msg.from_user.id) 
+            text = (
+                f"** ≭︰  دخل عضو جديد لـ↫ مصنع   **\n\n"
+                f"** ≭︰  الاسم : {msg.from_user.first_name}   **\n"
+                f"** ≭︰  تاك : {msg.from_user.mention}   **\n"
+                f"** ≭︰  الايدي : {msg.from_user.id} **"
             )
+            user_count = len(await get_users())
+            reply_markup = InlineKeyboardMarkup(
+                [[InlineKeyboardButton(f" ≭︰عدد الاعضاء  {user_count}", 
+                 callback_data=f"user_count_{msg.from_user.id}")]]
+            )
+            
+            if msg.chat.id not in OWNER_ID:
+                for user_id in OWNER_ID:
+                    try:
+                        await bot.send_message(
+                            int(user_id), 
+                            text, 
+                            reply_markup=reply_markup
+                        )
+                    except Exception as e:
+                        logger.error(f"فشل إرسال إشعار للمطور {user_id}: {e}")
+
+        print(f"[DEBUG] قيمة off: {off}")
+        # عرض واجهة المستخدم المناسبة
+        if off:
+            if not await is_dev(msg.chat.id):
+                print(f"[DEBUG] المصنع مغلق والمستخدم ليس مطور")
+                return await msg.reply_text(
+                    f"**≭︰التنصيب المجاني معطل، راسل المبرمج ↫ @{OWNER[0]}**"
+                )
+            else:
+                print(f"[DEBUG] المستخدم مطور - عرض لوحة المطور")
+                keyboard = [
+                    [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
+                    [("❲ فتح المصنع ❳"), ("❲ قفل المصنع ❳")],
+                    [("❲ ايقاف بوت ❳"), ("❲ تشغيل بوت ❳")],
+                    [("❲ ايقاف البوتات ❳"), ("❲ تشغيل البوتات ❳")],
+                    [("❲ البوتات المشتغلة ❳")],
+                    [("❲ البوتات المصنوعه ❳"), ("❲ تحديث الصانع ❳")],
+                    [("❲ الاحصائيات ❳")],
+                    [("❲ رفع مطور ❳"), ("❲ تنزيل مطور ❳")],
+                    [("❲ المطورين ❳")],
+                    [("❲ اذاعه ❳"), ("❲ اذاعه بالتوجيه ❳"), ("❲ اذاعه بالتثبيت ❳")],
+                    [("❲ استخراج جلسه ❳"), ("❲ الاسكرينات المفتوحه ❳")],
+                    ["❲ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳", "❲ 𝚁𝙴𝚂𝚃𝙰𝚁𝚃 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳"],
+                    [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
+                    [("❲ اخفاء الكيبورد ❳")]
+                ]
+                reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+                await msg.reply("** ≭︰اهلا بك عزيزي المطور  **", 
+                               reply_markup=reply_markup, 
+                               quote=True)
         else:
+            print(f"[DEBUG] المصنع مفتوح - عرض لوحة العضو")
             keyboard = [
                 [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
-                [("❲ فتح المصنع ❳"), ("❲ قفل المصنع ❳")],
-                [("❲ ايقاف بوت ❳"), ("❲ تشغيل بوت ❳")],
-                [("❲ ايقاف البوتات ❳"), ("❲ تشغيل البوتات ❳")],
-                [("❲ البوتات المشتغلة ❳")],
-                [("❲ البوتات المصنوعه ❳"), ("❲ تحديث الصانع ❳")],
-                [("❲ الاحصائيات ❳")],
-                [("❲ رفع مطور ❳"), ("❲ تنزيل مطور ❳")],
-                [("❲ المطورين ❳")],
-                [("❲ اذاعه ❳"), ("❲ اذاعه بالتوجيه ❳"), ("❲ اذاعه بالتثبيت ❳")],
-                [("❲ استخراج جلسه ❳"), ("❲ الاسكرينات المفتوحه ❳")],
-                ["❲ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳", "❲ 𝚁𝙴𝚂𝚃𝙰𝚁𝚃 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳"],
+                [("❲ استخراج جلسه ❳")],
                 [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
                 [("❲ اخفاء الكيبورد ❳")]
             ]
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-            await msg.reply("** ≭︰اهلا بك عزيزي المطور  **", 
-                           reply_markup=reply_markup, 
-                           quote=True)
-    else:
-        keyboard = [
-            [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
-            [("❲ استخراج جلسه ❳")],
-            [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
-            [("❲ اخفاء الكيبورد ❳")]
-        ]
-        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-        await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
-                       reply_markup=reply_markup, 
-                       quote=True)
+                         await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
+                            reply_markup=reply_markup, 
+                            quote=True)
+    except Exception as e:
+        print(f"[ERROR] خطأ في معالج start: {e}")
+        await msg.reply("حدث خطأ، حاول مرة أخرى")
 
 @bot.on_message(filters.private)
 async def chat_manager(client, message):
