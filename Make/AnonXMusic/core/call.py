@@ -8,8 +8,7 @@ from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls
 from pytgcalls.exceptions import (
     AlreadyJoinedError,
-    NoActiveGroupCall,
-    TelegramServerError,
+    NotInCallError,
 )
 from pytgcalls.types import Update
 from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
@@ -311,11 +310,11 @@ class Call(PyTgCalls):
                 chat_id,
                 stream,
             )
-        except NoActiveGroupCall:
+        except NotInCallError:
             raise AssistantErr(_["call_8"])
         except AlreadyJoinedError:
             raise AssistantErr(_["call_9"])
-        except TelegramServerError:
+        except Exception:
             raise AssistantErr(_["call_10"])
         await add_active_chat(chat_id)
         await music_on(chat_id)
