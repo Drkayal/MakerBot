@@ -1030,19 +1030,26 @@ async def on_start():
 @bot.on_message(filters.private, group=999)
 async def chat_manager(client, message):
     """إدارة الدردشات والمستخدمين"""
+    # إضافة المستخدم لقاعدة البيانات
     if message.chat.id not in mk:
         mk.append(message.chat.id)
         await mkchats_db.insert_one({"chat_id": message.chat.id})
 
+    # التحقق من الحظر
     if message.chat.id in blocked:
         return await message.reply_text("انت محظور من صانع عزيزي")
 
+    # استثناء المطورين من فحص الاشتراك
+    if await is_dev(message.from_user.id):
+        return
+
+    # التحقق من الاشتراك للمستخدمين العاديين فقط
     try:
-        await client.get_chat_member(ch, message.from_user.id)
+        await client.get_chat_member("@k55dd", message.from_user.id)
     except Exception as e:
         logger.error(f"خطأ في التحقق من العضوية: {e}")
         return await message.reply_text(
-            f"**يجب ان تشترك ف قناة السورس أولا \n {ch}**"
+            f"**يجب ان تشترك ف قناة السورس أولا \n https://t.me/k55dd**"
         )
 
 if __name__ == "__main__":
