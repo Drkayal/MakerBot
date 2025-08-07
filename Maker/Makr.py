@@ -582,16 +582,20 @@ async def create_bot(client, message):
         ask = await client.ask(message.chat.id, "<b> ≭︰ارسـل كـود الـجلسـه </b>", timeout=120)
         SESSION = ask.text.strip()
         
-        # التحقق من صحة كود الجلسة
-        if len(SESSION) < 300 or "session" not in SESSION.lower():
-            return await message.reply_text("<b> ≭︰كود الجلسة غير صحيح! يجب أن يكون كود جلسة صالحاً</b>")
+        # التحقق من صحة كود الجلسة (طول أولي)
+        if len(SESSION) < 200:
+            return await message.reply_text("<b> ≭︰كود الجلسة قصير جداً! تأكد من نسخ الكود كاملاً</b>")
         
         try:
+            print(f"[DEBUG] فحص الجلسة: طول الكود = {len(SESSION)}")
             user_client = Client("user", api_id=API_ID, api_hash=API_HASH, session_string=SESSION, in_memory=True)
             await user_client.start()
+            user_me = await user_client.get_me()
+            print(f"[DEBUG] تم التحقق من الجلسة بنجاح: {user_me.first_name}")
             await user_client.stop()
         except Exception as e:
             logger.error(f"خطأ في الجلسة: {e}")
+            print(f"[DEBUG] خطأ في الجلسة: {e}")
             return await message.reply_text(f"<b> ≭︰كود الجلسة غير صحيح: {str(e)}</b>")
 
         # طلب آيدي المطور (للمطورين الأساسيين فقط)
