@@ -11,7 +11,7 @@ from youtubesearchpython.__future__ import VideosSearch
 from AnonXMusic.utils.database import is_on_off
 from AnonXMusic.utils.formatters import time_to_seconds
 
-cookies_file = "/root/cookies/cookies.txt"
+cookies_file = "/workspace/cookies/cookies.txt"
 
 
 async def shell_cmd(cmd):
