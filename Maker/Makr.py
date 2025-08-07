@@ -703,7 +703,7 @@ async def create_bot(client, message):
         
         # أولاً: تثبيت المتطلبات
         install_msg = await message.reply("**≭︰جاري تثبيت متطلبات البوت...**")
-        install_cmd = ["bash", "-c", f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt"]
+        install_cmd = ["bash", "-c", f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt --break-system-packages"]
         stdout, stderr, returncode = await safe_screen_command(install_cmd)
         
         if returncode != 0:
