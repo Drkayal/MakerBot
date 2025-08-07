@@ -41,7 +41,7 @@ broadcasts_collection = bot_db["broadcasts"]
 devs_collection = bot_db["devs"]
 
 # متغيرات الحالة
-off = True
+off = False
 Bots = []
 mk = []
 blocked = []
@@ -330,32 +330,14 @@ async def start_command(bot, msg):
                 [("❲ اخفاء الكيبورد ❳")]
             ]
             reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-                         await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
-                            reply_markup=reply_markup, 
-                            quote=True)
+            await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
+                           reply_markup=reply_markup, 
+                           quote=True)
     except Exception as e:
         print(f"[ERROR] خطأ في معالج start: {e}")
         await msg.reply("حدث خطأ، حاول مرة أخرى")
 
-@bot.on_message(filters.private)
-async def chat_manager(client, message):
-    """إدارة الدردشات والمستخدمين"""
-    if message.chat.id not in mk:
-        mk.append(message.chat.id)
-        await mkchats_db.insert_one({"chat_id": message.chat.id})
-
-    if message.chat.id in blocked:
-        return await message.reply_text("انت محظور من صانع عزيزي")
-
-    try:
-        await client.get_chat_member(ch, message.from_user.id)
-    except Exception as e:
-        logger.error(f"خطأ في التحقق من العضوية: {e}")
-        return await message.reply_text(
-            f"**يجب ان تشترك ف قناة السورس أولا \n {ch}**"
-        )
-    
-    message.continue_propagation()
+# تم تحريك chat_manager إلى نهاية الملف
 
 @bot.on_message(filters.command(["❲ السورس ❳"], ""))
 async def source_info(client: Client, message: Message):
@@ -1016,6 +998,25 @@ async def stop_all_bots(client, message):
 async def on_start():
     await load_data()
     logger.info("تم بدء تشغيل صانع البوتات")
+
+# معالج عام للرسائل الخاصة - يجب أن يكون في النهاية
+@bot.on_message(filters.private, group=999)
+async def chat_manager(client, message):
+    """إدارة الدردشات والمستخدمين"""
+    if message.chat.id not in mk:
+        mk.append(message.chat.id)
+        await mkchats_db.insert_one({"chat_id": message.chat.id})
+
+    if message.chat.id in blocked:
+        return await message.reply_text("انت محظور من صانع عزيزي")
+
+    try:
+        await client.get_chat_member(ch, message.from_user.id)
+    except Exception as e:
+        logger.error(f"خطأ في التحقق من العضوية: {e}")
+        return await message.reply_text(
+            f"**يجب ان تشترك ف قناة السورس أولا \n {ch}**"
+        )
 
 if __name__ == "__main__":
     bot.run()
