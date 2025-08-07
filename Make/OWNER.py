@@ -2,7 +2,7 @@
 
 #يوزر المطور
 OWNER = ["AAAKP"] 
-OWNER_ID = 985612253
+OWNER_ID = [985612253]
 OWNER_DEVELOPER = 985612253
 #اسم المطور
 OWNER_NAME = "𓏺 َ𝐷𝑟. 𝐾ℎ𝑎𝑦𝑎𝑙 𓏺"

@@ -5,13 +5,13 @@ from dotenv import load_dotenv
 from pyrogram import filters
 
 load_dotenv()
-from OWNER import OWNER, infophoto, OWNER__ID, OWNER_DEVELOPER, OWNER_NAME, DATABASE, CHANNEL, GROUP, LOGS, PHOTO, VIDEO
+from OWNER import OWNER, infophoto, OWNER_ID, OWNER_DEVELOPER, OWNER_NAME, DATABASE, CHANNEL, GROUP, LOGS, PHOTO, VIDEO
 
 MONGO_DB_URI = DATABASE
 OWNER = OWNER
 infophoto = infophoto
 OWNER_DEVELOPER = OWNER_DEVELOPER
-OWNER__ID = OWNER__ID
+OWNER_ID = OWNER_ID
 OWNER_NAME = OWNER_NAME
 CHANNEL = CHANNEL
 GROUP = GROUP
@@ -33,8 +33,7 @@ DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 300))
 # Chat id of a group for logging bot's activities
 LOGGER_ID = int(getenv("LOGGER_ID", -1002051286023))
 
-# Get this value from @FallenxBot on Telegram by /id
-OWNER_ID = int(getenv("OWNER_ID", 985612253))
+# OWNER_ID تم تعريفه في ملف OWNER.py
 
 ## Fill these variables if you're deploying on heroku.
 # Your heroku app name
