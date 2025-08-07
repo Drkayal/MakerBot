@@ -121,16 +121,14 @@ def sanitize_path(path: str) -> str:
     return re.sub(r'[^a-zA-Z0-9_-]', '', path)
 
 def is_screen_running(name: str) -> bool:
-    """التحقق مما إذا كانت جلسة الشاشة قيد التشغيل"""
+    """التحقق مما إذا كان البوت قيد التشغيل"""
     try:
-        name = sanitize_path(name)
         result = subprocess.run(
-            ["screen", "-ls"],
+            ["pgrep", "-f", f"python3 -m AnonXMusic.*{name}"],
             capture_output=True,
-            text=True,
-            check=True
+            text=True
         )
-        return name in result.stdout
+        return result.returncode == 0 and result.stdout.strip()
     except subprocess.CalledProcessError:
         return False
 
@@ -703,9 +701,8 @@ async def create_bot(client, message):
         # التشغيل الرسمي
         screen_name = sanitize_path(bot_id)
         cmd = [
-            "screen", "-dmS", screen_name, 
-            "bash", "-c", 
-            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && python3 -m AnonXMusic"
+            "nohup", "bash", "-c", 
+            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"
         ]
         
         start_msg = await message.reply("**≭︰جاري التشغيل الرسمي للبوت...**")
@@ -939,8 +936,9 @@ async def stop_bot(client, message):
     for folder in os.listdir("Maked"):
         if re.search('[Bb][Oo][Tt]', folder, re.IGNORECASE) and bot_username in folder:
             bot_found = True
-            screen_name = sanitize_path(folder)
-            await safe_screen_command(["screen", "-XS", screen_name, "quit"])
+            # إيقاف البوت باستخدام pkill
+            bot_dir = f"/workspace/Maked/{folder}"
+            await safe_screen_command(["pkill", "-f", f"python3 -m AnonXMusic.*{folder}"])
             await message.reply_text(f"** ≭︰تم ايقاف البوت @{bot_username} بنجاح **")
             break
 
