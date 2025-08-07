@@ -7,17 +7,17 @@ main_bot = Client(
     "B7R",
     api_id=API_ID,
     api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
-    plugins=dict(root="Maker")
+    bot_token=BOT_TOKEN
 )
 
 async def start_bot():
     print("[INFO]: جاري تشغيل البوت")
-    await main_bot.start()
+    # تشغيل البوت الأساسي من Makr.py
+    from Maker.Makr import bot, on_start
+    await bot.start()
     print("[INFO]: بدأ تشغيل")
     # استدعاء دالة التحميل الأولي
     try:
-        from Maker.Makr import on_start
         await on_start()
     except Exception as e:
         print(f"[ERROR]: خطأ في التحميل الأولي: {e}")
