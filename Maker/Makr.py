@@ -714,12 +714,24 @@ async def create_bot(client, message):
             return
         
         # التحقق من تشغيل البوت
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)  # وقت أطول للتحقق
         if is_screen_running(bot_id):
             await start_msg.edit("**≭︰تم تشغيل البوت بنجاح!**")
         else:
-            await start_msg.edit("<b>فشل التشغيل: البوت لم يبدأ بشكل صحيح</b>")
-            shutil.rmtree(bot_dir, ignore_errors=True)
+            # قراءة ملف السجل لمعرفة السبب
+            log_file = f"{bot_dir}/bot.log"
+            error_info = "لا توجد معلومات إضافية"
+            if os.path.exists(log_file):
+                try:
+                    with open(log_file, 'r') as f:
+                        log_content = f.read()[-500:]  # آخر 500 حرف من السجل
+                        error_info = log_content
+                except:
+                    pass
+            
+            await start_msg.edit(f"<b>فشل التشغيل: البوت لم يبدأ بشكل صحيح</b>\n\n<code>السجل:\n{error_info}</code>")
+            # عدم حذف البوت للتشخيص
+            # shutil.rmtree(bot_dir, ignore_errors=True)
             return
 
         # تحديث القوائم
