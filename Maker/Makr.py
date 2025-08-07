@@ -700,12 +700,31 @@ async def create_bot(client, message):
         
         # التشغيل الرسمي
         screen_name = sanitize_path(bot_id)
-        cmd = [
-            "bash", "-c", 
-            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && nohup python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"
-        ]
         
-        start_msg = await message.reply("**≭︰جاري التشغيل الرسمي للبوت...**")
+        # أولاً: تثبيت المتطلبات
+        install_msg = await message.reply("**≭︰جاري تثبيت متطلبات البوت...**")
+        install_cmd = ["bash", "-c", f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt"]
+        stdout, stderr, returncode = await safe_screen_command(install_cmd)
+        
+        if returncode != 0:
+            await install_msg.edit(f"<b>فشل تثبيت المتطلبات: {stderr[:1000]}</b>")
+            shutil.rmtree(bot_dir, ignore_errors=True)
+            return
+        
+        # ثانياً: اختبار التشغيل السريع
+        await install_msg.edit("**≭︰جاري اختبار التشغيل...**")
+        test_cmd = ["bash", "-c", f"cd {bot_dir} && timeout 15 python3 -m AnonXMusic"]
+        stdout, stderr, returncode = await safe_screen_command(test_cmd)
+        
+        # عرض نتيجة الاختبار
+        if returncode != 0:
+            await install_msg.edit(f"<b>فشل اختبار التشغيل:</b>\n\n<code>{stderr[:1500] if stderr else 'لا توجد تفاصيل'}</code>")
+            # عدم حذف البوت للتشخيص
+            return
+        
+        # ثالثاً: التشغيل في الخلفية
+        start_msg = await install_msg.edit("**≭︰جاري التشغيل الرسمي للبوت...**")
+        cmd = ["bash", "-c", f"cd {bot_dir} && nohup python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"]
         stdout, stderr, returncode = await safe_screen_command(cmd)
         
         if returncode != 0:
