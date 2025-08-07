@@ -25,9 +25,10 @@ from telethon.errors import (
 )
 
 from config import API_ID, API_HASH, CHANNEL, PHOTO
+from .Makr import bot
 
 
-@Client.on_message(filters.command(["❲ استخراج جلسه ❳"], ""))
+@bot.on_message(filters.command(["❲ استخراج جلسه ❳"], ""))
 async def getsession(app, message: Message):
     try:
         num = await app.ask(message.chat.id, "**ا≯︰رسل رقم الهاتف**", timeout=60)
