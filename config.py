@@ -9,6 +9,7 @@ API_ID = int(getenv("API_ID", "17490746"))
 API_HASH = getenv("API_HASH", "ed923c3d59d699018e79254c6f8b6671")
 BOT_TOKEN = BOT_TOKEN
 MONGO_DB_URL = DATABASE
+MONGO_DB_URI = DATABASE
 OWNER = OWNER
 OWNER_ID = OWNER_ID
 infophoto = infophoto
@@ -18,3 +19,10 @@ GROUP = GROUP
 PHOTO = PHOTO
 LOGS = LOGS
 VIDEO = VIDEO
+
+# متغيرات إضافية مطلوبة
+HEROKU_APP_NAME = None
+HEROKU_API_KEY = None
+UPSTREAM_REPO = "https://github.com/BLAKAQ/a"
+UPSTREAM_BRANCH = "master"
+GIT_TOKEN = None
