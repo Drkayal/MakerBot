@@ -69,6 +69,30 @@ class TelegramBot:
             "resize_keyboard": True
         }
     
+    def handle_create_bot(self, chat_id, user_id):
+        """معالج صنع البوت"""
+        import os
+        import shutil
+        import subprocess
+        import re
+        from pyrogram import Client
+        
+        # التحقق من صلاحية المطور
+        OWNER_IDS = [985612253]
+        if user_id not in OWNER_IDS:
+            # التحقق من وجود بوت سابق للمستخدم
+            bots_file = "/workspace/bots_list.txt"
+            if os.path.exists(bots_file):
+                with open(bots_file, 'r') as f:
+                    existing_bots = f.read()
+                    if str(user_id) in existing_bots:
+                        self.send_message(chat_id, "<b> ≭︰لـقـد قـمت بـصـنع بـوت مـن قـبل </b>")
+                        return
+        
+        # بدء عملية صنع البوت
+        self.send_message(chat_id, "<b> ≭︰ارسـل تـوكـن الـبوت </b>")
+        # هنا يجب إضافة نظام انتظار الرد - سنحتاج لتطوير هذا
+        
     def handle_message(self, message):
         """معالج الرسائل"""
         chat_id = message["chat"]["id"]
@@ -104,7 +128,8 @@ class TelegramBot:
                 )
         
         elif text == "❲ صنع بوت ❳":
-            self.send_message(chat_id, "🤖 **صنع البوت**\n\nالمعذرة، هذه الميزة قيد التطوير بسبب مشاكل في النظام.\n\nيرجى المحاولة لاحقاً.")
+            # تطبيق الكود الأصلي لصنع البوت
+            self.handle_create_bot(chat_id, user_id)
         
         elif text == "❲ السورس ❳":
             self.send_message(chat_id, "📂 **السورس**\n\nقناة السورس: https://t.me/k55dd")
