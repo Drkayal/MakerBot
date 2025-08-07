@@ -701,8 +701,8 @@ async def create_bot(client, message):
         # التشغيل الرسمي
         screen_name = sanitize_path(bot_id)
         cmd = [
-            "nohup", "bash", "-c", 
-            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"
+            "bash", "-c", 
+            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && nohup python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"
         ]
         
         start_msg = await message.reply("**≭︰جاري التشغيل الرسمي للبوت...**")
@@ -715,10 +715,10 @@ async def create_bot(client, message):
         
         # التحقق من تشغيل البوت
         await asyncio.sleep(5)
-        if is_screen_running(screen_name):
+        if is_screen_running(bot_id):
             await start_msg.edit("**≭︰تم تشغيل البوت بنجاح!**")
         else:
-            await start_msg.edit("<b>فشل التشغيل: جلسة الشاشة غير نشطة</b>")
+            await start_msg.edit("<b>فشل التشغيل: البوت لم يبدأ بشكل صحيح</b>")
             shutil.rmtree(bot_dir, ignore_errors=True)
             return
 
