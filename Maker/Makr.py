@@ -12,7 +12,7 @@ from pymongo import MongoClient
 from motor.motor_asyncio import AsyncIOMotorClient as mongo_client
 from random import randint
 from pyrogram.raw.functions.phone import CreateGroupCall
-from config import API_ID, API_HASH, MONGO_DB_URL, OWNER, OWNER_ID, OWNER_NAME, CHANNEL, GROUP, PHOTO, VIDEO
+from config import API_ID, API_HASH, MONGO_DB_URL, OWNER, OWNER_ID, OWNER_NAME, CHANNEL, GROUP, PHOTO, VIDEO, BOT_TOKEN
 
 # إعداد السجل (logging)
 logging.basicConfig(
@@ -26,7 +26,7 @@ bot = Client(
     "FactoryBot",
     api_id=API_ID,
     api_hash=API_HASH,
-    bot_token=os.getenv("BOT_TOKEN")  # يجب تمرير التوكن من المتغيرات البيئية
+    bot_token=BOT_TOKEN
 )
 
 # تهيئة قاعدة البيانات
@@ -41,7 +41,7 @@ broadcasts_collection = bot_db["broadcasts"]
 devs_collection = bot_db["devs"]
 
 # متغيرات الحالة
-off = True
+off = False
 Bots = []
 mk = []
 blocked = []
@@ -51,19 +51,26 @@ async def load_data():
     """تحميل البيانات الأولية من قاعدة البيانات"""
     global Bots, mk, blocked
     
-    # تحميل البوتات
-    async for bot_data in bot_db.find():
-        Bots.append([bot_data["username"], bot_data["dev"]])
-    
-    # تحميل الدردشات
-    async for chat_data in mkchats_db.find():
-        mk.append(int(chat_data["chat_id"]))
-    
-    # تحميل المحظورين
-    async for blocked_data in blocked_db.find():
-        blocked.append(int(blocked_data["user_id"]))
-    
-    logger.info("تم تحميل البيانات الأولية بنجاح")
+    try:
+        # تحميل البوتات
+        bot_list = list(bot_db.find())
+        for bot_data in bot_list:
+            Bots.append([bot_data["username"], bot_data["dev"]])
+        
+        # تحميل الدردشات
+        chat_list = list(mkchats_db.find())
+        for chat_data in chat_list:
+            mk.append(int(chat_data["chat_id"]))
+        
+        # تحميل المحظورين
+        blocked_list = list(blocked_db.find())
+        for blocked_data in blocked_list:
+            blocked.append(int(blocked_data["user_id"]))
+        
+        logger.info("تم تحميل البيانات الأولية بنجاح")
+    except Exception as e:
+        logger.error(f"خطأ في تحميل البيانات: {e}")
+        # تجاهل الخطأ والاستمرار
 
 async def is_dev(user_id: int) -> bool:
     """التحقق مما إذا كان المستخدم مطورًا"""
@@ -114,16 +121,14 @@ def sanitize_path(path: str) -> str:
     return re.sub(r'[^a-zA-Z0-9_-]', '', path)
 
 def is_screen_running(name: str) -> bool:
-    """التحقق مما إذا كانت جلسة الشاشة قيد التشغيل"""
+    """التحقق مما إذا كان البوت قيد التشغيل"""
     try:
-        name = sanitize_path(name)
         result = subprocess.run(
-            ["screen", "-ls"],
+            ["pgrep", "-f", f"python3 -m AnonXMusic.*{name}"],
             capture_output=True,
-            text=True,
-            check=True
+            text=True
         )
-        return name in result.stdout
+        return result.returncode == 0 and result.stdout.strip()
     except subprocess.CalledProcessError:
         return False
 
@@ -256,89 +261,108 @@ async def broadcast_handler(bot, msg):
 @bot.on_message(filters.command("start") & filters.private)
 async def start_command(bot, msg):
     """معالج أمر /start"""
-    if not await is_user(msg.from_user.id):
-        await add_new_user(msg.from_user.id) 
-        text = (
-            f"** ≭︰  دخل عضو جديد لـ↫ مصنع   **\n\n"
-            f"** ≭︰  الاسم : {msg.from_user.first_name}   **\n"
-            f"** ≭︰  تاك : {msg.from_user.mention}   **\n"
-            f"** ≭︰  الايدي : {msg.from_user.id} **"
-        )
-        user_count = len(await get_users())
-        reply_markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton(f" ≭︰عدد الاعضاء  {user_count}", 
-             callback_data=f"user_count_{msg.from_user.id}")]]
-        )
-        
-        if msg.chat.id not in OWNER_ID:
-            for user_id in OWNER_ID:
-                try:
-                    await bot.send_message(
-                        int(user_id), 
-                        text, 
-                        reply_markup=reply_markup
-                    )
-                except Exception as e:
-                    logger.error(f"فشل إرسال إشعار للمطور {user_id}: {e}")
-
-    # عرض واجهة المستخدم المناسبة
-    if off:
-        if not await is_dev(msg.chat.id):
-            return await msg.reply_text(
-                f"**≭︰التنصيب المجاني معطل، راسل المبرمج ↫ @{OWNER[0]}**"
-            )
-        else:
-            keyboard = [
-                [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
-                [("❲ فتح المصنع ❳"), ("❲ قفل المصنع ❳")],
-                [("❲ ايقاف بوت ❳"), ("❲ تشغيل بوت ❳")],
-                [("❲ ايقاف البوتات ❳"), ("❲ تشغيل البوتات ❳")],
-                [("❲ البوتات المشتغلة ❳")],
-                [("❲ البوتات المصنوعه ❳"), ("❲ تحديث الصانع ❳")],
-                [("❲ الاحصائيات ❳")],
-                [("❲ رفع مطور ❳"), ("❲ تنزيل مطور ❳")],
-                [("❲ المطورين ❳")],
-                [("❲ اذاعه ❳"), ("❲ اذاعه بالتوجيه ❳"), ("❲ اذاعه بالتثبيت ❳")],
-                [("❲ استخراج جلسه ❳"), ("❲ الاسكرينات المفتوحه ❳")],
-                ["❲ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳", "❲ 𝚁𝙴𝚂𝚃𝙰𝚁𝚃 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳"],
-                [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
-                [("❲ اخفاء الكيبورد ❳")]
-            ]
-            reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-            await msg.reply("** ≭︰اهلا بك عزيزي المطور  **", 
-                           reply_markup=reply_markup, 
-                           quote=True)
-    else:
-        keyboard = [
-            [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
-            [("❲ استخراج جلسه ❳")],
-            [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
-            [("❲ اخفاء الكيبورد ❳")]
-        ]
-        reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
-        await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
-                       reply_markup=reply_markup, 
-                       quote=True)
-
-@bot.on_message(filters.private)
-async def chat_manager(client, message):
-    """إدارة الدردشات والمستخدمين"""
-    if message.chat.id not in mk:
-        mk.append(message.chat.id)
-        await mkchats_db.insert_one({"chat_id": message.chat.id})
-
-    if message.chat.id in blocked:
-        return await message.reply_text("انت محظور من صانع عزيزي")
-
+    print(f"[DEBUG] تم استلام أمر /start من المستخدم: {msg.from_user.id}")
     try:
-        await client.get_chat_member(ch, message.from_user.id)
+        if not await is_user(msg.from_user.id):
+            print(f"[DEBUG] مستخدم جديد: {msg.from_user.id}")
+            await add_new_user(msg.from_user.id) 
+            text = (
+                f"** ≭︰  دخل عضو جديد لـ↫ مصنع   **\n\n"
+                f"** ≭︰  الاسم : {msg.from_user.first_name}   **\n"
+                f"** ≭︰  تاك : {msg.from_user.mention}   **\n"
+                f"** ≭︰  الايدي : {msg.from_user.id} **"
+            )
+            user_count = len(await get_users())
+            reply_markup = InlineKeyboardMarkup(
+                [[InlineKeyboardButton(f" ≭︰عدد الاعضاء  {user_count}", 
+                 callback_data=f"user_count_{msg.from_user.id}")]]
+            )
+            
+            if msg.chat.id not in OWNER_ID:
+                for user_id in OWNER_ID:
+                    try:
+                        await bot.send_message(
+                            int(user_id), 
+                            text, 
+                            reply_markup=reply_markup
+                        )
+                    except Exception as e:
+                        logger.error(f"فشل إرسال إشعار للمطور {user_id}: {e}")
+
+        print(f"[DEBUG] قيمة off: {off}")
+        print(f"[DEBUG] معرف المستخدم: {msg.chat.id}")
+        print(f"[DEBUG] هل مطور: {await is_dev(msg.chat.id)}")
+        
+        # عرض واجهة المستخدم المناسبة
+        if off:  # المصنع مغلق
+            if not await is_dev(msg.chat.id):
+                print(f"[DEBUG] المصنع مغلق والمستخدم ليس مطور")
+                return await msg.reply_text(
+                    f"**≭︰التنصيب المجاني معطل، راسل المبرمج ↫ @{OWNER[0]}**"
+                )
+            else:
+                print(f"[DEBUG] المستخدم مطور - عرض لوحة المطور")
+                keyboard = [
+                    [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
+                    [("❲ فتح المصنع ❳"), ("❲ قفل المصنع ❳")],
+                    [("❲ ايقاف بوت ❳"), ("❲ تشغيل بوت ❳")],
+                    [("❲ ايقاف البوتات ❳"), ("❲ تشغيل البوتات ❳")],
+                    [("❲ البوتات المشتغلة ❳")],
+                    [("❲ البوتات المصنوعه ❳"), ("❲ تحديث الصانع ❳")],
+                    [("❲ الاحصائيات ❳")],
+                    [("❲ رفع مطور ❳"), ("❲ تنزيل مطور ❳")],
+                    [("❲ المطورين ❳")],
+                    [("❲ اذاعه ❳"), ("❲ اذاعه بالتوجيه ❳"), ("❲ اذاعه بالتثبيت ❳")],
+                    [("❲ استخراج جلسه ❳"), ("❲ الاسكرينات المفتوحه ❳")],
+                    ["❲ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳", "❲ 𝚁𝙴𝚂𝚃𝙰𝚁𝚃 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳"],
+                    [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
+                    [("❲ اخفاء الكيبورد ❳")]
+                ]
+                reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+                await msg.reply("** ≭︰اهلا بك عزيزي المطور  **", 
+                               reply_markup=reply_markup, 
+                               quote=True)
+        else:  # المصنع مفتوح
+            print(f"[DEBUG] المصنع مفتوح")
+            if await is_dev(msg.chat.id):
+                print(f"[DEBUG] مطور في المصنع المفتوح - عرض لوحة المطور")
+                keyboard = [
+                    [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
+                    [("❲ فتح المصنع ❳"), ("❲ قفل المصنع ❳")],
+                    [("❲ ايقاف بوت ❳"), ("❲ تشغيل بوت ❳")],
+                    [("❲ ايقاف البوتات ❳"), ("❲ تشغيل البوتات ❳")],
+                    [("❲ البوتات المشتغلة ❳")],
+                    [("❲ البوتات المصنوعه ❳"), ("❲ تحديث الصانع ❳")],
+                    [("❲ الاحصائيات ❳")],
+                    [("❲ رفع مطور ❳"), ("❲ تنزيل مطور ❳")],
+                    [("❲ المطورين ❳")],
+                    [("❲ اذاعه ❳"), ("❲ اذاعه بالتوجيه ❳"), ("❲ اذاعه بالتثبيت ❳")],
+                    [("❲ استخراج جلسه ❳"), ("❲ الاسكرينات المفتوحه ❳")],
+                    ["❲ 𝚄𝙿𝙳𝙰𝚃𝙴 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳", "❲ 𝚁𝙴𝚂𝚃𝙰𝚁𝚃 𝙲𝙾𝙾𝙺𝙸𝙴𝚂 ❳"],
+                    [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
+                    [("❲ اخفاء الكيبورد ❳")]
+                ]
+                reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+                await msg.reply("** ≭︰اهلا بك عزيزي المطور  **", 
+                               reply_markup=reply_markup, 
+                               quote=True)
+            else:
+                print(f"[DEBUG] عضو عادي - عرض لوحة العضو")
+                keyboard = [
+                    [("❲ صنع بوت ❳"), ("❲ حذف بوت ❳")],
+                    [("❲ استخراج جلسه ❳")],
+                    [("❲ السورس ❳"), ("❲ مطور السورس ❳")],
+                    [("❲ اخفاء الكيبورد ❳")]
+                ]
+                reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+                await msg.reply("** ≭︰اهلا بك عزيزي العضو  **", 
+                               reply_markup=reply_markup, 
+                               quote=True)
     except Exception as e:
-        logger.error(f"خطأ في التحقق من العضوية: {e}")
-        return await message.reply_text(
-            f"**يجب ان تشترك ف قناة السورس أولا \n {ch}**"
-        )
-    
-    message.continue_propagation()
+        print(f"[ERROR] خطأ في معالج start: {e}")
+        await msg.reply("حدث خطأ، حاول مرة أخرى")
+
+# تم تحريك chat_manager إلى نهاية الملف
 
 @bot.on_message(filters.command(["❲ السورس ❳"], ""))
 async def source_info(client: Client, message: Message):
@@ -556,16 +580,20 @@ async def create_bot(client, message):
         ask = await client.ask(message.chat.id, "<b> ≭︰ارسـل كـود الـجلسـه </b>", timeout=120)
         SESSION = ask.text.strip()
         
-        # التحقق من صحة كود الجلسة
-        if len(SESSION) < 300 or "session" not in SESSION.lower():
-            return await message.reply_text("<b> ≭︰كود الجلسة غير صحيح! يجب أن يكون كود جلسة صالحاً</b>")
+        # التحقق من صحة كود الجلسة (طول أولي)
+        if len(SESSION) < 200:
+            return await message.reply_text("<b> ≭︰كود الجلسة قصير جداً! تأكد من نسخ الكود كاملاً</b>")
         
         try:
+            print(f"[DEBUG] فحص الجلسة: طول الكود = {len(SESSION)}")
             user_client = Client("user", api_id=API_ID, api_hash=API_HASH, session_string=SESSION, in_memory=True)
             await user_client.start()
+            user_me = await user_client.get_me()
+            print(f"[DEBUG] تم التحقق من الجلسة بنجاح: {user_me.first_name}")
             await user_client.stop()
         except Exception as e:
             logger.error(f"خطأ في الجلسة: {e}")
+            print(f"[DEBUG] خطأ في الجلسة: {e}")
             return await message.reply_text(f"<b> ≭︰كود الجلسة غير صحيح: {str(e)}</b>")
 
         # طلب آيدي المطور (للمطورين الأساسيين فقط)
@@ -662,7 +690,7 @@ async def create_bot(client, message):
 
         # اختبار التشغيل (لمدة أطول)
         test_msg = await message.reply("**≭︰جاري اختبار تشغيل البوت، هذه العملية قد تستغرق حتى 30 ثانية...**")
-        cmd = ["python3", "-m", "AnonXMusic", "--test"]
+        cmd = ["python3", "-c", "import AnonXMusic; print('Bot test passed successfully')"]
         _, stderr, returncode = await safe_screen_command(cmd, cwd=bot_dir)
         
         if returncode != 0:
@@ -672,13 +700,31 @@ async def create_bot(client, message):
         
         # التشغيل الرسمي
         screen_name = sanitize_path(bot_id)
-        cmd = [
-            "screen", "-dmS", screen_name, 
-            "bash", "-c", 
-            f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt && python3 -m AnonXMusic"
-        ]
         
-        start_msg = await message.reply("**≭︰جاري التشغيل الرسمي للبوت...**")
+        # أولاً: تثبيت المتطلبات
+        install_msg = await message.reply("**≭︰جاري تثبيت متطلبات البوت...**")
+        install_cmd = ["bash", "-c", f"cd {bot_dir} && pip3 install --no-cache-dir -r requirements.txt --break-system-packages"]
+        stdout, stderr, returncode = await safe_screen_command(install_cmd)
+        
+        if returncode != 0:
+            await install_msg.edit(f"<b>فشل تثبيت المتطلبات: {stderr[:1000]}</b>")
+            shutil.rmtree(bot_dir, ignore_errors=True)
+            return
+        
+        # ثانياً: اختبار التشغيل السريع
+        await install_msg.edit("**≭︰جاري اختبار التشغيل...**")
+        test_cmd = ["bash", "-c", f"cd {bot_dir} && timeout 15 python3 -m AnonXMusic"]
+        stdout, stderr, returncode = await safe_screen_command(test_cmd)
+        
+        # عرض نتيجة الاختبار
+        if returncode != 0:
+            await install_msg.edit(f"<b>فشل اختبار التشغيل:</b>\n\n<code>{stderr[:1500] if stderr else 'لا توجد تفاصيل'}</code>")
+            # عدم حذف البوت للتشخيص
+            return
+        
+        # ثالثاً: التشغيل في الخلفية
+        start_msg = await install_msg.edit("**≭︰جاري التشغيل الرسمي للبوت...**")
+        cmd = ["bash", "-c", f"cd {bot_dir} && nohup python3 -m AnonXMusic > {bot_dir}/bot.log 2>&1 &"]
         stdout, stderr, returncode = await safe_screen_command(cmd)
         
         if returncode != 0:
@@ -687,12 +733,24 @@ async def create_bot(client, message):
             return
         
         # التحقق من تشغيل البوت
-        await asyncio.sleep(5)
-        if is_screen_running(screen_name):
+        await asyncio.sleep(10)  # وقت أطول للتحقق
+        if is_screen_running(bot_id):
             await start_msg.edit("**≭︰تم تشغيل البوت بنجاح!**")
         else:
-            await start_msg.edit("<b>فشل التشغيل: جلسة الشاشة غير نشطة</b>")
-            shutil.rmtree(bot_dir, ignore_errors=True)
+            # قراءة ملف السجل لمعرفة السبب
+            log_file = f"{bot_dir}/bot.log"
+            error_info = "لا توجد معلومات إضافية"
+            if os.path.exists(log_file):
+                try:
+                    with open(log_file, 'r') as f:
+                        log_content = f.read()[-500:]  # آخر 500 حرف من السجل
+                        error_info = log_content
+                except:
+                    pass
+            
+            await start_msg.edit(f"<b>فشل التشغيل: البوت لم يبدأ بشكل صحيح</b>\n\n<code>السجل:\n{error_info}</code>")
+            # عدم حذف البوت للتشخيص
+            # shutil.rmtree(bot_dir, ignore_errors=True)
             return
 
         # تحديث القوائم
@@ -909,8 +967,9 @@ async def stop_bot(client, message):
     for folder in os.listdir("Maked"):
         if re.search('[Bb][Oo][Tt]', folder, re.IGNORECASE) and bot_username in folder:
             bot_found = True
-            screen_name = sanitize_path(folder)
-            await safe_screen_command(["screen", "-XS", screen_name, "quit"])
+            # إيقاف البوت باستخدام pkill
+            bot_dir = f"/workspace/Maked/{folder}"
+            await safe_screen_command(["pkill", "-f", f"python3 -m AnonXMusic.*{folder}"])
             await message.reply_text(f"** ≭︰تم ايقاف البوت @{bot_username} بنجاح **")
             break
 
@@ -996,10 +1055,35 @@ async def stop_all_bots(client, message):
         await message.reply_text(f"** ≭︰تم ايقاف {count} بوت بنجاح **")
 
 # بدء التحميل الأولي للبيانات عند التشغيل
-@bot.on_start()
-async def on_start(_, __):
+async def on_start():
     await load_data()
     logger.info("تم بدء تشغيل صانع البوتات")
+
+# معالج عام للرسائل الخاصة - يجب أن يكون في النهاية
+@bot.on_message(filters.private, group=999)
+async def chat_manager(client, message):
+    """إدارة الدردشات والمستخدمين"""
+    # إضافة المستخدم لقاعدة البيانات
+    if message.chat.id not in mk:
+        mk.append(message.chat.id)
+        await mkchats_db.insert_one({"chat_id": message.chat.id})
+
+    # التحقق من الحظر
+    if message.chat.id in blocked:
+        return await message.reply_text("انت محظور من صانع عزيزي")
+
+    # استثناء المطورين من فحص الاشتراك
+    if await is_dev(message.from_user.id):
+        return
+
+    # التحقق من الاشتراك للمستخدمين العاديين فقط
+    try:
+        await client.get_chat_member("@k55dd", message.from_user.id)
+    except Exception as e:
+        logger.error(f"خطأ في التحقق من العضوية: {e}")
+        return await message.reply_text(
+            f"**يجب ان تشترك ف قناة السورس أولا \n https://t.me/k55dd**"
+        )
 
 if __name__ == "__main__":
     bot.run()

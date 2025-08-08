@@ -1,0 +1,122 @@
+nohup: ignoring input
+2025-08-07 03:14:24,999 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:25,157 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:25,158 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:25,518 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:25,678 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:25,678 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:25,678 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:27,523 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:27,523 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:27,523 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:27,680 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:27,680 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:28,037 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:28,195 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:28,195 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:28,196 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:30,041 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:30,041 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:30,041 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:30,199 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:30,199 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:30,560 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:30,718 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:30,719 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:30,719 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:32,564 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:32,564 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:32,564 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:32,722 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:32,722 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:33,084 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:33,242 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:33,243 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:33,243 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:35,088 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:35,088 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:35,088 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:35,245 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:35,245 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:35,599 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:35,758 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:35,758 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:35,758 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:37,603 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:37,603 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:37,603 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:37,760 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:37,760 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:38,114 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:38,273 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:38,273 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:38,273 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:40,118 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:40,118 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:40,118 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:40,275 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:40,275 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:40,631 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:40,789 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:40,789 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:40,789 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:42,633 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:42,633 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:42,633 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:42,791 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:42,791 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:43,149 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:43,307 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:43,308 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:43,308 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:45,152 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:45,152 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:45,152 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:45,309 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:45,309 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:45,666 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:45,825 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:45,825 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:45,825 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:47,670 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:47,670 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:47,670 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:47,827 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:47,828 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:48,183 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:48,341 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:48,341 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:48,341 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:50,186 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:50,186 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:50,186 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:50,345 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:50,345 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:50,705 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:50,864 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:50,864 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:50,864 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:52,708 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:52,708 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:52,708 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:52,866 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:52,866 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:53,223 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:53,382 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:53,382 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:53,382 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:55,227 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:55,227 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:55,227 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:55,385 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:55,385 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:55,740 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.
+2025-08-07 03:14:55,899 - pyrogram.session.session - INFO - Discarding packet: The msg_id belongs to over 30 seconds in the future. Most likely the client time has to be synchronized.
+2025-08-07 03:14:55,900 - pyrogram.session.session - INFO - NetworkTask stopped
+2025-08-07 03:14:55,900 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:57,744 - pyrogram.connection.connection - INFO - Disconnected
+2025-08-07 03:14:57,744 - pyrogram.session.session - INFO - Session stopped
+2025-08-07 03:14:57,744 - pyrogram.connection.connection - INFO - Connecting...
+2025-08-07 03:14:57,901 - pyrogram.connection.connection - INFO - Connected! Production DC4 - IPv4
+2025-08-07 03:14:57,901 - pyrogram.session.session - INFO - NetworkTask started
+2025-08-07 03:14:58,257 - pyrogram.session.session - WARNING - BadMsgNotification: [16] The msg_id is too low, the client time has to be synchronized.

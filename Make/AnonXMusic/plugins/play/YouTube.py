@@ -9,7 +9,7 @@ import yt_dlp
 from AnonXMusic import app
 import os
 import glob
-cookies_file = "/root/cookies/cookies.txt"
+cookies_file = "/workspace/cookies/cookies.txt"
 os.makedirs("downloads", exist_ok=True)
 
 @app.on_message(filters.command(['نزل', 'حمل', 'تنزيل', 'يوت'], ""))

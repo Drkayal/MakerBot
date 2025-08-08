@@ -1,6 +1,7 @@
 aiofiles
 aiohttp
 asyncio
+asyncpg
 beautifulsoup4
 dnspython
 ffmpeg-python
@@ -10,7 +11,7 @@ heroku3
 motor
 pillow
 psutil
-py-tgcalls==0.9.7
+py-tgcalls==2.0.6
 pykeyboard
 pyrogram==2.0.106
 python-dotenv
@@ -21,5 +22,8 @@ spotipy
 tgcrypto
 unidecode
 yt-dlp
+youtube-search
 youtube-search-python
-youtube_search
+telegraph
+numpy
+wget
